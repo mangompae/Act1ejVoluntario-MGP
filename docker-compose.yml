@@ -1,0 +1,30 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD:
+      MYSQL_DATABASE: mi_voluntario
+
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysqldata:/var/lib/mysql
+
+  backend:
+    build: .
+    container_name: backend_app
+    restart: always
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/mi_voluntario?serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: usuario
+      SPRING_DATASOURCE_PASSWORD: usuario
+    ports:
+      - "8080:8080"
+
+volumes:
+  mysqldata:
+#Manuel Gomez Paez
